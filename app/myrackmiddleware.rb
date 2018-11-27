@@ -8,8 +8,8 @@ class MyRackMiddleware
 
   def initialize(appl)
     @appl = appl
-    @token
-    @algorithm
+    #@white_list = LoadConfig.new.load_white_list
+    @checkWL =  CheckWhiteList.new
   end
 
   def call(env)
@@ -17,14 +17,16 @@ class MyRackMiddleware
     @env = env
     request(env)
     status, headers, body = @appl.call(env) # we now call the inner application
-    white_list_path_present
-
-    response_rack("200", "header")
-    #status = set_status
-    #set_response(status)
+    #white_list_path_present
+    if @checkWL.host_present?(http_host)
+      response_rack("200", "Success")
+    else
+      response_rack("401", "Failed")
+    end
+    #set_response(set_status)
   end
 
-  #private
+  private
 
   def request(env)
     @request = Rack::Request.new(env)
@@ -94,9 +96,7 @@ class MyRackMiddleware
   #   payload = JSON.parse(Base64.decode64(tm[1].tr('-_', '+/')))
   # end
 #--------------------------------------------------------------------------
-  def white_list
-    YAML::load_file(File.join(__dir__, 'white_list.yml'))
-  end
+
 
   def request_method
     @env['REQUEST_METHOD']
@@ -115,25 +115,5 @@ class MyRackMiddleware
 
     end
   end
-
-  def host_present?
-    wl = white_list
-    host = http_host.split('.')
-    if wl.has_key?(host[0])
-      case path = wl[host[0]]
-        when request_path
-          return true
-        when check_target(path)
-          return true
-        else
-          return false
-      end
-    end
-  end
-
-  def check_target(mas)
-    mas['target']
-  end
-
 
 end

@@ -1,5 +1,8 @@
 require_relative "../app/my_app"
 require_relative "../app/myrackmiddleware"
+require_relative "../app/loadConfig"
+require_relative "../app/check_white_list"
+
 require 'pry'
 require "test/unit"
 require "rack/test"
@@ -19,7 +22,7 @@ class HomepageTest < Test::Unit::TestCase
   def test_request_method_get
     get 'https://auth.com'
 
-    assert_equal(app.host_present?, true )
+    assert_equal(last_response.status, 200 )
   end
 
 
