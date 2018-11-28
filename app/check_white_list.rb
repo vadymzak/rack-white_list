@@ -1,7 +1,7 @@
 class CheckWhiteList
 
   def initialize
-    @wl = LoadConfig.new.load_white_list
+    @wl = ConfigLoad.new.load_white_list
   end
 
   def host_present?(http_host, path, request_method)

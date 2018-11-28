@@ -1,6 +1,6 @@
 require_relative "../app/my_app"
 require_relative "../app/myrackmiddleware"
-require_relative "../app/loadConfig"
+require_relative "../app/config_load"
 require_relative "../app/check_white_list"
 
 require 'pry'
