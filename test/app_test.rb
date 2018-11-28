@@ -14,42 +14,46 @@ class HomepageTest < Test::Unit::TestCase
     MyRackMiddleware.new(MyApp.new)
   end
 
-  # def test_status_401_with_without_token
-  #   get "/"
-  #
-  #   assert_equal last_response.status, 401
-  # end
-  def test_request_method_get
-    get 'https://auth.com'
+  def test_status_401_with_without_token
+    get "/"
+
+    assert_equal last_response.status, 401
+  end
+
+  def test_status_200_with_domen_auth
+    get 'http://auth.com/signup'
 
     assert_equal(last_response.status, 200 )
   end
 
+  def test_status_200_with_domen_auth_id
+    get 'http://auth.com/signup/id'
 
+    assert_equal(last_response.status, 200 )
+  end
 
-  # def test_status_401_with_not_valid_token
-  #   get "/?token=sdfsdfszg"
-  #
-  #   assert_equal last_response.status, 401
-  # end
-  #
-  # def test_status_200_with_hs256_valid_token_in_params
-  #   payload = { data: 'test' }
-  #   @valid = JWT.encode payload, HMAC_KEY, 'HS256'
-  #
-  #   get "/?token=Bearer #{@valid}"
-  #
-  #   assert_equal last_response.status, 200
-  # end
-  #
-  # def test_status_200_with_hs256_valid_token_in_header
-  #   payload = { data: 'test' }
-  #   @valid = JWT.encode payload, HMAC_KEY, 'HS256'
-  #
-  #   header 'AUTHORIZATION', "Bearer #{@valid}"
-  #   get "/"
-  #
-  #   assert_equal last_response.status, 200
-  # end
+  def test_status_200_with_domen_resources_countries_method_GET
+    get 'http://resources.com/countries'
+
+    assert_equal(last_response.status, 200 )
+  end
+
+  def test_status_200_with_domen_dots_signin
+    get 'http://dots.com/signin'
+
+    assert_equal(last_response.status, 200 )
+  end
+
+  def test_status_200_with_domen_dots_test_method_GET
+    get 'http://dots.com/test'
+
+    assert_equal(last_response.status, 200 )
+  end
+
+  def test_status_200_with_domen_dots_test_method_POST
+    post 'http://dots.com/test'
+
+    assert_equal(last_response.status, 200 )
+  end
 
 end

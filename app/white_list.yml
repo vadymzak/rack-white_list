@@ -1,11 +1,11 @@
 ---
 auth:
- - /signup
+ - signup
 
 resources:
- - target: /countries
+ - target: countries
    method: GET
 dots:
- - target: /test
+ - target: test
    method: [GET, POST]
- - /signin
+ - signin

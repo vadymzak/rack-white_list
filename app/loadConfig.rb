@@ -1,3 +1,5 @@
+require 'yaml'
+
 class LoadConfig
 
   def load_white_list
