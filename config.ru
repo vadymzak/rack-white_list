@@ -1,7 +1,7 @@
-require './app/my_app'
-require './app/myrackmiddleware'
-require './app/config_load'
-require './app/check_white_list'
+require './lib/my_app'
+require './lib/myrackmiddleware'
+require './lib/config_load'
+require './lib/check_white_list'
 use Rack::Reloader
 use MyRackMiddleware
 run MyApp.new

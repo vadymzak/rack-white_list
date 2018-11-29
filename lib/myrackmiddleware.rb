@@ -6,7 +6,7 @@ class MyRackMiddleware
 
   def initialize(appl)
     @appl = appl
-    @checkWL =  CheckWhiteList.new
+    @checkWL =  WhiteListChecker.new
   end
 
   def call(env)

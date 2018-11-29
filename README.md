@@ -1,3 +1,9 @@
-WhiteList Validator<br/>
-Run tests for checking<br/>
-Read list from file white_list.yml
+# WhiteList Validator <br/>
+
+###Start<br/>
+```sh
+ $ rackup config.ru
+ ```
+
+
+Whitelist is in config/white_list.yml
