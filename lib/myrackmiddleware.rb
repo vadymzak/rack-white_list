@@ -6,14 +6,14 @@ class MyRackMiddleware
 
   def initialize(appl)
     @appl = appl
-    @checkWL =  WhiteListChecker.new
+    @check_wl =  WhiteListChecker.new
   end
 
   def call(env)
     @env = env
     request(env)
     status, headers, body = @appl.call(env) # we now call the inner application
-    if @checkWL.host_present?(http_host, path_info, request_method)
+    if @check_wl.host_present?(http_host, path_info, request_method)
       response_rack("200", "Success")
     else
       response_rack("401", "Failed")
