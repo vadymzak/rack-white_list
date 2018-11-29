@@ -24,12 +24,9 @@ class WhiteListChecker
       if element.is_a?(Hash)
         case @wl.dig(domain).length
         when 1
-          return (valid_path_info?(path_info, @wl.dig(domain, 0, 'target'))) &&
-            valid_request_method?(request_method, @wl.dig(domain, 0, 'method'))
+          rule_one?(domain, path_info, request_method)
         when 2
-          if valid_path_info?(path_info, @wl.dig(domain, 0, 'target'))
-            return @wl.dig(domain, 0, 'method').include?(request_method)
-          end
+          rule_two?(domain, path_info, request_method)
         else
           raise 'Parse error'
         end
@@ -41,4 +38,22 @@ class WhiteListChecker
     }
   end
 
+  def rule_one?(domain, path_info, request_method)
+    (valid_path_info?(path_info, wl_target(domain))) &&
+      valid_request_method?(request_method, wl_method(domain))
+  end
+
+  def rule_two?(domain, path_info, request_method)
+    if valid_path_info?(path_info, wl_target(domain))
+      wl_method(domain).include?(request_method)
+    end
+  end
+
+  def wl_target(domain)
+    @wl.dig(domain, 0, 'target')
+  end
+
+  def wl_method(domain)
+    @wl.dig(domain, 0, 'method')
+  end
 end
