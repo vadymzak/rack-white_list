@@ -9,16 +9,7 @@ class WhiteListChecker
     host = http_host.split('.')
     domain = host[0]
     if @wl.has_key?(domain)
-      case @wl.dig(domain).length
-        when 1
-          return check_one_rule?(domain, path_info, request_method)
-        when 2
-          return check_two_rules?(domain, path_info, request_method)
-        else
-          p "parse error"
-          return false
-      end
-      return false
+      return check_rule?(domain, path_info, request_method)
     end
   end
 
@@ -30,26 +21,24 @@ class WhiteListChecker
     request_method == wl_method
   end
 
-  def check_one_rule?(domain, path_info, request_method)
+  def check_rule?(domain, path_info, request_method)
     @wl.dig(domain).map{ |element|
       if element.class == Hash
-        return (valid_path_info?(path_info, @wl.dig(domain, 0, "target"))) &&
-          valid_request_method?(request_method, @wl.dig(domain, 0, "method"))
-      elsif String
-        return valid_path_info?(path_info,element)
-      end
-    }
-  end
-
-  def check_two_rules?(domain, path_info, request_method)
-    @wl.dig(domain).map{ |element|
-      if element.class == Hash
-        if valid_path_info?(path_info, @wl.dig(domain, 0, "target"))
-          return @wl.dig(domain, 0, "method").include?(request_method)
+        case @wl.dig(domain).length
+          when 1
+            return (valid_path_info?(path_info, @wl.dig(domain, 0, "target"))) &&
+              valid_request_method?(request_method, @wl.dig(domain, 0, "method"))
+          when 2
+            if valid_path_info?(path_info, @wl.dig(domain, 0, "target"))
+              return @wl.dig(domain, 0, "method").include?(request_method)
+            end
+          else
+             raise "Parse error"
         end
-      elsif String
-        valid_path_info?(path_info,element)
+      elsif element.class == String
         return valid_path_info?(path_info,element)
+      else
+        raise "Parse error"
       end
     }
   end
