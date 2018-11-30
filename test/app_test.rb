@@ -20,20 +20,44 @@ class HomepageTest < Test::Unit::TestCase
     assert_equal last_response.status, 401
   end
 
-  def test_status_200_with_domen_auth
+  def test_status_200_with_domen_auth_signup
     get 'http://auth.com/signup'
 
     assert_equal(last_response.status, 200 )
   end
 
-  def test_status_200_with_domen_auth_id
-    get 'http://auth.com/signup/id'
+  def test_status_401_with_domen_auth_signupp
+    get 'http://auth.com/signupp'
 
-    assert_equal(last_response.status, 200 )
+    assert_equal(last_response.status, 401 )
   end
 
   def test_status_200_with_domen_resources_countries_method_GET
     get 'http://resources.com/countries'
+
+    assert_equal(last_response.status, 200 )
+  end
+
+  def test_status_401_with_domen_resources_countriess_method_GET
+    get 'http://resources.com/countriess'
+
+    assert_equal(last_response.status, 401 )
+  end
+
+  def test_status_200_with_domen_dots_test_method_GET
+    get 'http://dots.com/test'
+
+    assert_equal(last_response.status, 200 )
+  end
+
+  def test_status_401_with_domen_dots_tests_method_GET
+    get 'http://dots.com/tests'
+
+    assert_equal(last_response.status, 401 )
+  end
+
+  def test_status_200_with_domen_dots_test_method_POST
+    post 'http://dots.com/test'
 
     assert_equal(last_response.status, 200 )
   end
@@ -43,17 +67,6 @@ class HomepageTest < Test::Unit::TestCase
 
     assert_equal(last_response.status, 200 )
   end
-
-  def test_status_200_with_domen_dots_test_method_GET
-    get 'http://dots.com/test'
-
-    assert_equal(last_response.status, 200 )
-  end
-
-  def test_status_200_with_domen_dots_test_method_POST
-    post 'http://dots.com/test'
-
-    assert_equal(last_response.status, 200 )
-  end
+  #
 
 end
