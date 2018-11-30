@@ -9,7 +9,7 @@ class WhiteListChecker
 
   def host_present?
     check_rule? if @wl.has_key?(@domain)
-    return @result
+    @result
   end
 
   def check_rule?
@@ -17,14 +17,14 @@ class WhiteListChecker
   end
 
   def parse_element
-    ->(element) { (is_hash?(element) || is_string?(element)) unless @result }
+    ->(element) { (hash?(element) || string?(element)) unless @result }
   end
 
-  def is_hash?(element)
+  def hash?(element)
     hash_element if element.is_a?(Hash)
   end
 
-  def is_string?(element)
+  def string?(element)
     @result = valid_path_info?(element) if element.is_a?(String)
   end
 
@@ -37,11 +37,11 @@ class WhiteListChecker
   end
 
   def rule_one?
-   @result = ((valid_path_info?(wl_target)) && valid_request_method?)
+    @result = (valid_path_info?(wl_target) && valid_request_method?)
   end
 
   def rule_two?
-      valid_path_info?(wl_target) unless rule_one?
+    valid_path_info?(wl_target) unless rule_one?
   end
 
   def wl_target
