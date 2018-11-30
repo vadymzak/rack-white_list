@@ -17,15 +17,7 @@ class WhiteListChecker
   end
 
   def parse_element
-    ->(element) do#{ is_hash?(element) = is_string?(element) || false }
-      unless @result
-        if element.is_a?(Hash)
-          hash_element
-        elsif element.is_a?(String)
-          @result = valid_path_info?(element)
-        end
-       end
-    end
+    ->(element) { (is_hash?(element) || is_string?(element)) unless @result }
   end
 
   def parse_error?
