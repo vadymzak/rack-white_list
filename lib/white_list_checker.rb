@@ -29,14 +29,11 @@ class WhiteListChecker
   end
 
   def hash_element
-    case @wl.dig(@domain).length
-    when 1
-      rule_one?
-    when 2
-      rule_two?
-    else
-      raise 'Parse error'
-    end
+    hash_lenght? ? rule_one? : rule_two?
+  end
+
+  def hash_lenght?
+    @wl.dig(@domain).length == 1 ? true : false
   end
 
   def rule_one?
