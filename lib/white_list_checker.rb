@@ -20,11 +20,6 @@ class WhiteListChecker
     ->(element) { (is_hash?(element) || is_string?(element)) unless @result }
   end
 
-  def parse_error?
-    raise 'Parse error'
-    false
-  end
-
   def is_hash?(element)
     hash_element if element.is_a?(Hash)
   end
