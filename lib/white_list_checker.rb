@@ -1,13 +1,13 @@
 class WhiteListChecker
 
-  def initialize
+  def initialize(http_host, path, request_method)
     @wl = ConfigLoad.load_white_list
-  end
-
-  def host_present?(http_host, path, request_method)
     @path_info = path.split('/')[1]
     @request_method = request_method
     @domain = http_host.split('.')[0]
+  end
+
+  def host_present?
     check_rule? if @wl.has_key?(@domain)
     return @result
   end
