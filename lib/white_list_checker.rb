@@ -1,5 +1,4 @@
 class WhiteListChecker
-
   def initialize(http_host, path, request_method)
     @wl = ConfigLoad.load_white_list
     @path_info = path.split('/')[1]
@@ -17,23 +16,26 @@ class WhiteListChecker
   end
 
   def parse_element
-    ->(element) { (hash?(element) || string?(element)) unless @result }
+    ->(element) do
+      p host_data.values
+      unless @result
+        if element.is_a?(Hash)
+          hash_element(element)
+        elsif element.is_a?(String)
+          @result = valid_path_info?(element)
+        end
+      end
+    end
   end
 
-  def hash?(element)
-    hash_element if element.is_a?(Hash)
-  end
-
-  def string?(element)
-    @result = valid_path_info?(element) if element.is_a?(String)
-  end
-
-  def hash_element
-    hash_lenght? ? rule_one? : rule_two?
-  end
-
-  def hash_lenght?
-    @wl.dig(@domain).length == 1 ? true : false
+  def hash_element(element)
+    # case @wl.dig(@domain).length
+    # when 1
+    #   rule_one?
+    # when 2
+    #   rule_two?
+    # end
+  #  p (element[0].keys & host_data.keys)
   end
 
   def rule_one?
@@ -44,20 +46,24 @@ class WhiteListChecker
     valid_path_info?(wl_target) unless rule_one?
   end
 
-  def wl_target
-    @wl.dig(@domain, 0, 'target')
-  end
-
-  def wl_method
-    @wl.dig(@domain, 0, 'method')
-  end
-
   def valid_path_info?(target)
     @path_info == target
   end
 
   def valid_request_method?
     wl_method.include?(@request_method)
+  end
+
+  def host_data
+    {'target': @path_info, 'methods': @request_method}
+  end
+
+  def wl_target
+    @wl.dig(@domain, 0, 'target')
+  end
+
+  def wl_method
+    @wl.dig(@domain, 0, 'method')
   end
 
 end
