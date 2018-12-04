@@ -7,7 +7,7 @@ class WhiteListChecker
   end
 
   def host_present?
-    check_rule? if @wl.has_key?(@domain)
+    check_rule? if @wl.key?(@domain)
     @result
   end
 
@@ -17,10 +17,9 @@ class WhiteListChecker
 
   def parse_element
     ->(element) do
-      p host_data.values
       unless @result
         if element.is_a?(Hash)
-          hash_element(element)
+          @result = hash_element(element)
         elsif element.is_a?(String)
           @result = valid_path_info?(element)
         end
@@ -29,41 +28,20 @@ class WhiteListChecker
   end
 
   def hash_element(element)
-    # case @wl.dig(@domain).length
-    # when 1
-    #   rule_one?
-    # when 2
-    #   rule_two?
-    # end
-  #  p (element[0].keys & host_data.keys)
-  end
-
-  def rule_one?
-    @result = (valid_path_info?(wl_target) && valid_request_method?)
-  end
-
-  def rule_two?
-    valid_path_info?(wl_target) unless rule_one?
+    case @wl.dig(@domain).length
+    when 1
+      host_data.values == element.values
+    when 2
+      (element.fetch('target') == host_data.fetch(:target)) &&
+        element.fetch('method').include?(host_data.fetch(:method))
+    end
   end
 
   def valid_path_info?(target)
     @path_info == target
   end
 
-  def valid_request_method?
-    wl_method.include?(@request_method)
-  end
-
   def host_data
-    {'target': @path_info, 'methods': @request_method}
+    { 'target': @path_info, 'method': @request_method }
   end
-
-  def wl_target
-    @wl.dig(@domain, 0, 'target')
-  end
-
-  def wl_method
-    @wl.dig(@domain, 0, 'method')
-  end
-
 end
