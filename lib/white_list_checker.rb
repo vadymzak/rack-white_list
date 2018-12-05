@@ -17,12 +17,12 @@ class WhiteListChecker
 
   def parse_element
     ->(element) do
-      unless @result
-        if element.is_a?(Hash)
-          @result = hash_element(element)
-        elsif element.is_a?(String)
-          @result = valid_path_info?(element)
-        end
+      break if @result
+
+      if element.is_a?(Hash)
+        @result = hash_element(element)
+      elsif element.is_a?(String)
+        @result = valid_path_info?(element)
       end
     end
   end
